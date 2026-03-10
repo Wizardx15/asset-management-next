@@ -1,7 +1,7 @@
 import { getServerSession } from "next-auth"
 import { redirect } from "next/navigation"
 import { authOptions } from "@/lib/auth"
-import { Sidebar } from "@/components/ui/Sidebar";
+import Sidebar from "@/components/ui/Sidebar";  // Hapus curly braces!
 
 export default async function MainLayout({
   children,
