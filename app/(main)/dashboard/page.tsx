@@ -113,10 +113,9 @@ export default async function DashboardPage() {
     .limit(5)
 
   // Hitung persentase
-  const availablePercent = totalAssets ? Math.round((availableAssets / totalAssets) * 100) : 0
-  const borrowedPercent = totalAssets ? Math.round((borrowedAssets / totalAssets) * 100) : 0
-  const damagedPercent = totalAssets ? Math.round((damagedAssets / totalAssets) * 100) : 0
-
+const availablePercent = totalAssets ? Math.round(((availableAssets || 0) / totalAssets) * 100) : 0
+const borrowedPercent = totalAssets ? Math.round(((borrowedAssets || 0) / totalAssets) * 100) : 0
+const damagedPercent = totalAssets ? Math.round(((damagedAssets || 0) / totalAssets) * 100) : 0
   return (
     <div className="space-y-6">
       {/* Header with Welcome */}
