@@ -6,6 +6,7 @@ import bcrypt from "bcryptjs"
 declare module "next-auth" {
   interface User {
     role?: string
+    id: string
   }
   interface Session {
     user: {
@@ -14,6 +15,13 @@ declare module "next-auth" {
       email?: string | null
       role?: string
     }
+  }
+}
+
+declare module "next-auth/jwt" {
+  interface JWT {
+    role?: string
+    id: string
   }
 }
 
@@ -61,8 +69,9 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (session?.user) {
+        // Type assertion untuk token yang sudah dideclare di module
         session.user.role = token.role
-        session.user.id = token.id as string
+        session.user.id = token.id
       }
       return session
     }
