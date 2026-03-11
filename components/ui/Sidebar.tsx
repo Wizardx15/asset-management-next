@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { 
   LayoutDashboard, 
   Package, 
@@ -24,6 +24,11 @@ export default function Sidebar({ userRole }: SidebarProps) {
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
   const [isAdminOpen, setIsAdminOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   const menuItems = [
     {
@@ -45,8 +50,15 @@ export default function Sidebar({ userRole }: SidebarProps) {
 
   const isActive = (path: string) => pathname === path
 
-  // Debug: cek nilai userRole di console (bisa dihapus nanti)
-  console.log('Sidebar userRole:', userRole)
+  // Debug: cek nilai userRole di console
+  console.log('🟢 Sidebar userRole:', userRole)
+  console.log('🟢 isAdmin condition:', userRole === 'ADMIN')
+  console.log('🟢 isSuperAdmin condition:', userRole === 'SUPER_ADMIN')
+  console.log('🟢 should show admin menu:', userRole === 'ADMIN' || userRole === 'SUPER_ADMIN')
+
+  if (!mounted) {
+    return null // Prevent hydration mismatch
+  }
 
   return (
     <>
@@ -79,7 +91,7 @@ export default function Sidebar({ userRole }: SidebarProps) {
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">User</p>
-                <p className="text-xs text-gray-500 truncate capitalize">{userRole || 'user'}</p>
+                <p className="text-xs text-gray-500 truncate capitalize">{userRole?.toLowerCase() || 'user'}</p>
               </div>
             </div>
           </div>
@@ -110,7 +122,7 @@ export default function Sidebar({ userRole }: SidebarProps) {
                 )
               })}
 
-              {/* Admin Menu - untuk ADMIN dan SUPER_ADMIN (case sensitive) */}
+              {/* Admin Menu - untuk ADMIN dan SUPER_ADMIN */}
               {(userRole === 'ADMIN' || userRole === 'SUPER_ADMIN') && (
                 <li>
                   <button
@@ -165,6 +177,14 @@ export default function Sidebar({ userRole }: SidebarProps) {
                       )}
                     </ul>
                   )}
+                </li>
+              )}
+
+              {/* Debug info - temporary, bisa dihapus nanti */}
+              {process.env.NODE_ENV === 'development' && (
+                <li className="px-4 py-2 text-xs text-gray-400 border-t border-gray-100 mt-4">
+                  <div>Role: {userRole || 'none'}</div>
+                  <div>Show Admin: {(userRole === 'ADMIN' || userRole === 'SUPER_ADMIN') ? '✅' : '❌'}</div>
                 </li>
               )}
             </ul>
