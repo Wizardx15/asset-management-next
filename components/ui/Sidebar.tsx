@@ -88,19 +88,43 @@ export default function Sidebar({ userRole }: SidebarProps) {
                 )
               })}
 
-              {/* TEST ADMIN MENU - HARUSNYA KELIATAN */}
+              {/* ADMIN MENU - VERSI SUPER MENCALONKAN DIRI */}
               {(userRole === 'ADMIN' || userRole === 'SUPER_ADMIN') && (
                 <li>
-                  <div className="px-4 py-3 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 font-bold mb-2">
-                    ⚡ ADMIN MENU (Role: {userRole})
+                  {/* Background merah terang biar keliatan */}
+                  <div 
+                    style={{
+                      backgroundColor: '#ff0000',
+                      color: 'white',
+                      padding: '20px',
+                      margin: '10px 0',
+                      borderRadius: '8px',
+                      border: '5px solid yellow',
+                      fontWeight: 'bold',
+                      fontSize: '18px',
+                      textAlign: 'center'
+                    }}
+                  >
+                    🚨🚨🚨 ADMIN MENU HARUSNYA DISINI 🚨🚨🚨
                   </div>
+                  
+                  {/* Link dengan styling gede */}
                   <Link
                     href="/admin/users"
                     onClick={() => setIsOpen(false)}
-                    className="flex items-center gap-3 px-4 py-2 ml-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                    style={{
+                      display: 'block',
+                      backgroundColor: '#00ff00',
+                      color: 'black',
+                      padding: '15px',
+                      margin: '10px 0',
+                      borderRadius: '8px',
+                      border: '3px solid blue',
+                      fontWeight: 'bold',
+                      textAlign: 'center'
+                    }}
                   >
-                    <Users className="w-5 h-5" />
-                    <span>Manajemen User</span>
+                    👉 KLIK SINI KE MANAJEMEN USER 👈
                   </Link>
                 </li>
               )}
