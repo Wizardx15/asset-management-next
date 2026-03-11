@@ -43,20 +43,10 @@ export default function Sidebar({ userRole }: SidebarProps) {
     }
   ]
 
-  const adminMenuItems = [
-    {
-      title: 'Manajemen User',
-      href: '/admin/users',
-      icon: Users
-    },
-    {
-      title: 'Settings',
-      href: '/admin/settings',
-      icon: Settings
-    }
-  ]
-
   const isActive = (path: string) => pathname === path
+
+  // Debug: cek nilai userRole di console (bisa dihapus nanti)
+  console.log('Sidebar userRole:', userRole)
 
   return (
     <>
@@ -120,8 +110,8 @@ export default function Sidebar({ userRole }: SidebarProps) {
                 )
               })}
 
-              {/* Admin Menu - untuk admin DAN superadmin */}
-              {(userRole === 'admin' || userRole === 'superadmin') && (
+              {/* Admin Menu - untuk ADMIN dan SUPER_ADMIN (case sensitive) */}
+              {(userRole === 'ADMIN' || userRole === 'SUPER_ADMIN') && (
                 <li>
                   <button
                     onClick={() => setIsAdminOpen(!isAdminOpen)}
@@ -154,8 +144,8 @@ export default function Sidebar({ userRole }: SidebarProps) {
                         </Link>
                       </li>
                       
-                      {/* Settings - hanya untuk superadmin */}
-                      {userRole === 'superadmin' && (
+                      {/* Settings - hanya untuk SUPER_ADMIN */}
+                      {userRole === 'SUPER_ADMIN' && (
                         <li>
                           <Link
                             href="/admin/settings"
