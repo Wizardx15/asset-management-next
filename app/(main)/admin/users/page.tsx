@@ -14,8 +14,8 @@ export default async function UsersPage() {
     redirect("/login")
   }
 
-  // Hanya SUPER_ADMIN yang bisa akses
-  if (session.user?.role !== 'SUPER_ADMIN') {
+  // Izinkan ADMIN dan SUPER_ADMIN akses halaman users
+  if (session.user?.role !== 'ADMIN' && session.user?.role !== 'SUPER_ADMIN') {
     redirect("/dashboard")
   }
 
