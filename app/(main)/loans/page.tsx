@@ -80,6 +80,7 @@ export default function LoansPage() {
   const fetchLoans = async () => {
     setIsLoading(true)
     try {
+      // Query builder untuk data
       let query = supabase
         .from('asset_loans')
         .select(`
@@ -107,13 +108,34 @@ export default function LoansPage() {
         `)
       }
 
-      // Pagination
+      // HITUNG TOTAL DATA DULU (untuk pagination)
+      const countQuery = supabase
+        .from('asset_loans')
+        .select('*', { count: 'exact', head: true })
+
+      // Apply filter yang sama ke count query
+      if (statusFilter !== 'ALL') {
+        countQuery.eq('status', statusFilter)
+      }
+      
+      if (searchTerm) {
+        countQuery.or(`
+          peminjam_nama.ilike.%${searchTerm}%,
+          peminjam_email.ilike.%${searchTerm}%,
+          employee_nik.ilike.%${searchTerm}%,
+          keperluan.ilike.%${searchTerm}%
+        `)
+      }
+
+      const { count, error: countError } = await countQuery
+
+      if (countError) throw countError
+
+      // PAGINATION - ambil data sesuai halaman
       const from = (currentPage - 1) * itemsPerPage
       const to = from + itemsPerPage - 1
       
-      const { data, error, count } = await query
-        .range(from, to)
-        .select('*', { count: 'exact' })
+      const { data, error } = await query.range(from, to)
 
       if (error) throw error
 
