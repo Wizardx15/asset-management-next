@@ -17,7 +17,7 @@ import {
 } from 'lucide-react'
 
 interface SidebarProps {
-  userRole?: string;  // Tambahin ini untuk menerima props dari layout
+  userRole?: string;  // Menerima props dari layout
 }
 
 export default function Sidebar({ userRole }: SidebarProps) {
@@ -120,8 +120,8 @@ export default function Sidebar({ userRole }: SidebarProps) {
                 )
               })}
 
-              {/* Admin Menu (hanya untuk admin) */}
-              {userRole === 'admin' && (
+              {/* Admin Menu - untuk admin DAN superadmin */}
+              {(userRole === 'admin' || userRole === 'superadmin') && (
                 <li>
                   <button
                     onClick={() => setIsAdminOpen(!isAdminOpen)}
@@ -136,27 +136,43 @@ export default function Sidebar({ userRole }: SidebarProps) {
                   
                   {isAdminOpen && (
                     <ul className="mt-2 ml-4 space-y-2">
-                      {adminMenuItems.map((item) => {
-                        const Icon = item.icon
-                        return (
-                          <li key={item.href}>
-                            <Link
-                              href={item.href}
-                              onClick={() => setIsOpen(false)}
-                              className={`
-                                flex items-center gap-3 px-4 py-2 rounded-lg transition-colors
-                                ${isActive(item.href) 
-                                  ? 'bg-blue-50 text-blue-600' 
-                                  : 'text-gray-700 hover:bg-gray-100'
-                                }
-                              `}
-                            >
-                              <Icon className="w-5 h-5" />
-                              <span>{item.title}</span>
-                            </Link>
-                          </li>
-                        )
-                      })}
+                      {/* Manajemen User - untuk semua admin */}
+                      <li>
+                        <Link
+                          href="/admin/users"
+                          onClick={() => setIsOpen(false)}
+                          className={`
+                            flex items-center gap-3 px-4 py-2 rounded-lg transition-colors
+                            ${isActive('/admin/users') 
+                              ? 'bg-blue-50 text-blue-600' 
+                              : 'text-gray-700 hover:bg-gray-100'
+                            }
+                          `}
+                        >
+                          <Users className="w-5 h-5" />
+                          <span>Manajemen User</span>
+                        </Link>
+                      </li>
+                      
+                      {/* Settings - hanya untuk superadmin */}
+                      {userRole === 'superadmin' && (
+                        <li>
+                          <Link
+                            href="/admin/settings"
+                            onClick={() => setIsOpen(false)}
+                            className={`
+                              flex items-center gap-3 px-4 py-2 rounded-lg transition-colors
+                              ${isActive('/admin/settings') 
+                                ? 'bg-blue-50 text-blue-600' 
+                                : 'text-gray-700 hover:bg-gray-100'
+                              }
+                            `}
+                          >
+                            <Settings className="w-5 h-5" />
+                            <span>Settings</span>
+                          </Link>
+                        </li>
+                      )}
                     </ul>
                   )}
                 </li>
@@ -168,7 +184,6 @@ export default function Sidebar({ userRole }: SidebarProps) {
           <div className="p-4 border-t border-gray-200">
             <button
               onClick={() => {
-                // Handle logout
                 window.location.href = '/api/auth/signout'
               }}
               className="w-full flex items-center gap-3 px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
