@@ -292,7 +292,7 @@ export default function DashboardPage() {
           </ResponsiveContainer>
         </div>
 
-        {/* Pie Chart Status Asset */}
+        {/* Pie Chart Status Asset - FIXED */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
           <h3 className="text-lg font-semibold text-gray-800 mb-4">Status Asset</h3>
           <ResponsiveContainer width="100%" height={300}>
@@ -306,7 +306,8 @@ export default function DashboardPage() {
                 cx="50%"
                 cy="50%"
                 labelLine={false}
-                label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                // FIXED: Added default value for percent
+                label={({ name, percent = 0 }) => `${name} ${(percent * 100).toFixed(0)}%`}
                 outerRadius={80}
                 fill="#8884d8"
                 dataKey="value"
