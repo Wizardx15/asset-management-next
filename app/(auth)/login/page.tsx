@@ -5,6 +5,7 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
+import { Package, Mail, Lock, Info } from 'lucide-react'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -39,50 +40,98 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      <div className="w-full max-w-sm p-6 bg-white rounded-lg shadow-md">
-        <h1 className="text-2xl font-bold text-center text-black mb-2">Login</h1>
-        <p className="text-sm text-center text-black mb-6">Masuk ke akun Anda</p>
-
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-black mb-1">Email</label>
-            <input
-              type="email"
-              required
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black"
-              placeholder="nama@email.com"
-            />
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
+      <div className="max-w-md w-full">
+        {/* Logo & Header */}
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-600 rounded-2xl mb-4">
+            <Package className="w-8 h-8 text-white" />
           </div>
+          <h1 className="text-3xl font-bold text-gray-900">Asset Management</h1>
+          <p className="text-gray-600 mt-2">Sistem Manajemen Asset Terintegrasi</p>
+        </div>
 
-          <div>
-            <label className="block text-sm font-medium text-black mb-1">Password</label>
-            <input
-              type="password"
-              required
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg text-black"
-              placeholder="••••••••"
-            />
+        {/* Demo Info Card */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+          <div className="flex items-start gap-3">
+            <div className="bg-blue-100 rounded-full p-2">
+              <Info className="w-5 h-5 text-blue-600" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-blue-800 text-sm mb-1">🚀 AKUN DEMO</h3>
+              <p className="text-sm text-blue-700">
+                <span className="font-medium">Email:</span> diki@gmail.com
+              </p>
+              <p className="text-sm text-blue-700">
+                <span className="font-medium">Password:</span> password123
+              </p>
+              <p className="text-xs text-blue-600 mt-2">
+                *Silakan gunakan akun demo di atas untuk mencoba aplikasi
+              </p>
+            </div>
           </div>
+        </div>
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 disabled:opacity-50 font-medium"
-          >
-            {isLoading ? 'Loading...' : 'Login'}
-          </button>
-        </form>
+        {/* Login Form */}
+        <div className="bg-white rounded-2xl shadow-xl p-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Login</h2>
+          <p className="text-gray-600 mb-6">Masuk ke akun Anda</p>
 
-        <p className="text-sm text-center text-black mt-4">
-          Belum punya akun?{' '}
-          <Link href="/register" className="text-blue-600 hover:underline font-medium">
-            Daftar
-          </Link>
+          <form onSubmit={handleSubmit} className="space-y-5">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Email
+              </label>
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder="nama@email.com"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-black"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <input
+                  type="password"
+                  required
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  placeholder="●●●●●●●"
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition text-black"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading}
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? 'Memproses...' : 'Login'}
+            </button>
+          </form>
+
+          <p className="text-center text-gray-600 mt-6">
+            Belum punya akun?{' '}
+            <Link href="/register" className="text-blue-600 hover:underline font-medium">
+              Daftar
+            </Link>
+          </p>
+        </div>
+
+        {/* Footer */}
+        <p className="text-center text-gray-500 text-sm mt-8">
+          © 2024 Asset Management. All rights reserved.
         </p>
       </div>
     </div>
