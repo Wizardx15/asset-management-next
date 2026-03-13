@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase-client'
 import { useSession } from 'next-auth/react'
-import { logActivityClient } from '@/lib/activity-logger'
+import { logActivityClient } from '@/lib/activity-logger-client'
 import toast from 'react-hot-toast'
 import { ArrowLeft } from 'lucide-react'
 

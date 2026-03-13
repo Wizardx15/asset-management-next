@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
 import { supabase } from '@/lib/supabase'
+import { headers } from 'next/headers'
 
 export async function POST(request: Request) {
   try {
@@ -11,10 +12,11 @@ export async function POST(request: Request) {
     }
 
     const data = await request.json()
-    const ipAddress = request.headers.get('x-forwarded-for') || 
-                      request.headers.get('x-real-ip') || 
+    const headersList = await headers()
+    const ipAddress = headersList.get('x-forwarded-for') || 
+                      headersList.get('x-real-ip') || 
                       'unknown'
-    const userAgent = request.headers.get('user-agent') || 'unknown'
+    const userAgent = headersList.get('user-agent') || 'unknown'
 
     const { error } = await supabase.from('activity_logs').insert({
       user_id: session.user.id,

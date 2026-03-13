@@ -2,7 +2,7 @@ import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { supabase } from "./supabase"
 import bcrypt from "bcryptjs"
-import { logActivityServer } from "./activity-logger"
+import { logActivityServer } from "./activity-logger-server"
 
 declare module "next-auth" {
   interface User {

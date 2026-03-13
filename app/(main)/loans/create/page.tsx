@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { supabase } from '@/lib/supabase-client'
 import { useSession } from 'next-auth/react'
 import { getEmployees, type Employee } from '@/lib/persona-hris'
-import { logActivityClient } from '@/lib/activity-logger'
+import { logActivityClient } from '@/lib/activity-logger-client'
 import toast from 'react-hot-toast'
 import { ArrowLeft, Search, User, Loader2 } from 'lucide-react'
 

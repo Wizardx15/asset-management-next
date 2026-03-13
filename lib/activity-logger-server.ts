@@ -13,6 +13,7 @@ export interface ActivityLogData {
 
 /**
  * Log aktivitas dari server component
+ * HANYA untuk Server Components
  */
 export async function logActivityServer(data: ActivityLogData) {
   try {
@@ -37,24 +38,5 @@ export async function logActivityServer(data: ActivityLogData) {
     if (error) console.error('Error logging activity:', error)
   } catch (error) {
     console.error('Failed to log activity:', error)
-  }
-}
-
-/**
- * Log aktivitas dari client component
- */
-export async function logActivityClient(data: ActivityLogData) {
-  try {
-    const response = await fetch('/api/activity/log', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    })
-    
-    if (!response.ok) {
-      console.error('Failed to log activity:', await response.text())
-    }
-  } catch (error) {
-    console.error('Error logging activity:', error)
   }
 }
