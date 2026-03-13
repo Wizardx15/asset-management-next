@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth"
 import CredentialsProvider from "next-auth/providers/credentials"
 import { supabase } from "./supabase"
 import bcrypt from "bcryptjs"
+import { logActivityServer } from "./activity-logger"
 
 declare module "next-auth" {
   interface User {
@@ -37,7 +38,14 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) return null
+        if (!credentials?.email || !credentials?.password) {
+          await logActivityServer({
+            action: 'LOGIN_FAILED',
+            entityType: 'auth',
+            details: { email: credentials?.email, reason: 'Missing credentials' }
+          })
+          return null
+        }
 
         const { data: user, error } = await supabase
           .from('users')
@@ -45,10 +53,34 @@ export const authOptions: NextAuthOptions = {
           .eq('email', credentials.email)
           .single()
 
-        if (error || !user || !user.password) return null
+        if (error || !user || !user.password) {
+          await logActivityServer({
+            action: 'LOGIN_FAILED',
+            entityType: 'auth',
+            details: { email: credentials.email, reason: 'User not found' }
+          })
+          return null
+        }
 
         const passwordMatch = await bcrypt.compare(credentials.password, user.password)
-        if (!passwordMatch) return null
+        if (!passwordMatch) {
+          await logActivityServer({
+            action: 'LOGIN_FAILED',
+            entityType: 'auth',
+            details: { email: credentials.email, reason: 'Wrong password' }
+          })
+          return null
+        }
+
+        // Log successful login
+        await logActivityServer({
+          userId: user.id,
+          userEmail: user.email,
+          userName: user.name,
+          action: 'LOGIN_SUCCESS',
+          entityType: 'auth',
+          details: { email: user.email }
+        })
 
         return {
           id: user.id,
@@ -69,7 +101,6 @@ export const authOptions: NextAuthOptions = {
     },
     async session({ session, token }) {
       if (session?.user) {
-        // Type assertion untuk token yang sudah dideclare di module
         session.user.role = token.role
         session.user.id = token.id
       }

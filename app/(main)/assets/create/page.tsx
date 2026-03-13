@@ -4,11 +4,14 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase-client'
+import { useSession } from 'next-auth/react'
+import { logActivityClient } from '@/lib/activity-logger'
 import toast from 'react-hot-toast'
 import { ArrowLeft } from 'lucide-react'
 
 export default function CreateAssetPage() {
   const router = useRouter()
+  const { data: session } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [formData, setFormData] = useState({
     kode: '',
@@ -24,14 +27,26 @@ export default function CreateAssetPage() {
     setIsLoading(true)
 
     try {
-      const { error } = await supabase
+      const { error, data } = await supabase
         .from('assets')
         .insert([formData])
+        .select()
 
       if (error) {
         toast.error('Gagal menambah asset')
         console.error(error)
       } else {
+        // Log activity
+        await logActivityClient({
+          userId: session?.user?.id,
+          userEmail: session?.user?.email,
+          userName: session?.user?.name,
+          action: 'CREATE_ASSET',
+          entityType: 'asset',
+          entityId: data?.[0]?.id,
+          details: { assetData: formData }
+        })
+
         toast.success('Asset berhasil ditambahkan')
         router.push('/assets')
       }

@@ -4,12 +4,15 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase-client'
+import { useSession } from 'next-auth/react'
 import { getEmployees, type Employee } from '@/lib/persona-hris'
+import { logActivityClient } from '@/lib/activity-logger'
 import toast from 'react-hot-toast'
 import { ArrowLeft, Search, User, Loader2 } from 'lucide-react'
 
 export default function CreateLoanPage() {
   const router = useRouter()
+  const { data: session } = useSession()
   const [isLoading, setIsLoading] = useState(false)
   const [isLoadingEmployees, setIsLoadingEmployees] = useState(false)
   const [assets, setAssets] = useState<any[]>([])
@@ -50,7 +53,7 @@ export default function CreateLoanPage() {
       try {
         const data = await getEmployees()
         setEmployees(data)
-        console.log('Employees loaded:', data) // Debug
+        console.log('Employees loaded:', data)
       } catch (error) {
         console.error('Gagal fetch employees:', error)
         toast.error('Gagal memuat data karyawan')
@@ -94,7 +97,7 @@ export default function CreateLoanPage() {
         return
       }
 
-      const { error } = await supabase
+      const { error, data } = await supabase
         .from('asset_loans')
         .insert([{
           asset_id: formData.asset_id,
@@ -108,11 +111,27 @@ export default function CreateLoanPage() {
           catatan: formData.catatan,
           status: 'PENDING'
         }])
+        .select()
 
       if (error) {
         toast.error('Gagal mengajukan peminjaman')
         console.error(error)
       } else {
+        // Log activity
+        await logActivityClient({
+          userId: session?.user?.id,
+          userEmail: session?.user?.email,
+          userName: session?.user?.name,
+          action: 'CREATE_LOAN',
+          entityType: 'loan',
+          entityId: data?.[0]?.id,
+          details: { 
+            assetId: formData.asset_id,
+            employeeNik: formData.employee_nik,
+            employeeName: formData.peminjam_nama
+          }
+        })
+
         toast.success('Peminjaman berhasil diajukan')
         router.push('/loans')
       }

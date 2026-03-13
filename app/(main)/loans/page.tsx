@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabase-client'
+import { useSession } from 'next-auth/react'
+import { logActivityClient } from '@/lib/activity-logger'
 import toast from 'react-hot-toast'
 import { 
   Plus, 
@@ -65,6 +67,7 @@ const StatusBadge = ({ status }: { status: string }) => {
 }
 
 export default function LoansPage() {
+  const { data: session } = useSession()
   const [loans, setLoans] = useState<Loan[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
@@ -167,6 +170,20 @@ export default function LoansPage() {
 
       if (error) throw error
 
+      // Log activity
+      await logActivityClient({
+        userId: session?.user?.id,
+        userEmail: session?.user?.email,
+        userName: session?.user?.name,
+        action: 'DELETE_LOAN',
+        entityType: 'loan',
+        entityId: selectedLoan.id,
+        details: { 
+          loanId: selectedLoan.id,
+          peminjam: selectedLoan.peminjam_nama
+        }
+      })
+
       toast.success('Peminjaman berhasil dihapus')
       fetchLoans()
       setShowDeleteModal(false)
@@ -190,6 +207,20 @@ export default function LoansPage() {
 
       if (error) throw error
 
+      // Log activity
+      await logActivityClient({
+        userId: session?.user?.id,
+        userEmail: session?.user?.email,
+        userName: session?.user?.name,
+        action: 'APPROVE_LOAN',
+        entityType: 'loan',
+        entityId: loan.id,
+        details: { 
+          loanId: loan.id,
+          peminjam: loan.peminjam_nama
+        }
+      })
+
       toast.success('Peminjaman disetujui')
       fetchLoans()
     } catch (error) {
@@ -210,6 +241,20 @@ export default function LoansPage() {
         .eq('id', loan.id)
 
       if (error) throw error
+
+      // Log activity
+      await logActivityClient({
+        userId: session?.user?.id,
+        userEmail: session?.user?.email,
+        userName: session?.user?.name,
+        action: 'REJECT_LOAN',
+        entityType: 'loan',
+        entityId: loan.id,
+        details: { 
+          loanId: loan.id,
+          peminjam: loan.peminjam_nama
+        }
+      })
 
       toast.success('Peminjaman ditolak')
       fetchLoans()
@@ -232,6 +277,20 @@ export default function LoansPage() {
         .eq('id', loan.id)
 
       if (error) throw error
+
+      // Log activity
+      await logActivityClient({
+        userId: session?.user?.id,
+        userEmail: session?.user?.email,
+        userName: session?.user?.name,
+        action: 'RETURN_LOAN',
+        entityType: 'loan',
+        entityId: loan.id,
+        details: { 
+          loanId: loan.id,
+          peminjam: loan.peminjam_nama
+        }
+      })
 
       toast.success('Asset telah dikembalikan')
       fetchLoans()
