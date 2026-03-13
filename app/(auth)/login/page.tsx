@@ -131,7 +131,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <p className="text-center text-gray-500 text-sm mt-8">
-          © 2024 Asset Management. All rights reserved.
+          © 2026 Asset Management. All rights reserved.
         </p>
       </div>
     </div>
