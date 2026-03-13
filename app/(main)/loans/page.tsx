@@ -170,11 +170,11 @@ export default function LoansPage() {
 
       if (error) throw error
 
-      // Log activity
+      // Log activity - FIXED: handle null values
       await logActivityClient({
-        userId: session?.user?.id,
-        userEmail: session?.user?.email,
-        userName: session?.user?.name,
+        userId: session?.user?.id ?? undefined,
+        userEmail: session?.user?.email ?? undefined,
+        userName: session?.user?.name ?? undefined,
         action: 'DELETE_LOAN',
         entityType: 'loan',
         entityId: selectedLoan.id,
@@ -207,11 +207,11 @@ export default function LoansPage() {
 
       if (error) throw error
 
-      // Log activity
+      // Log activity - FIXED: handle null values
       await logActivityClient({
-        userId: session?.user?.id,
-        userEmail: session?.user?.email,
-        userName: session?.user?.name,
+        userId: session?.user?.id ?? undefined,
+        userEmail: session?.user?.email ?? undefined,
+        userName: session?.user?.name ?? undefined,
         action: 'APPROVE_LOAN',
         entityType: 'loan',
         entityId: loan.id,
@@ -242,11 +242,11 @@ export default function LoansPage() {
 
       if (error) throw error
 
-      // Log activity
+      // Log activity - FIXED: handle null values
       await logActivityClient({
-        userId: session?.user?.id,
-        userEmail: session?.user?.email,
-        userName: session?.user?.name,
+        userId: session?.user?.id ?? undefined,
+        userEmail: session?.user?.email ?? undefined,
+        userName: session?.user?.name ?? undefined,
         action: 'REJECT_LOAN',
         entityType: 'loan',
         entityId: loan.id,
@@ -278,11 +278,11 @@ export default function LoansPage() {
 
       if (error) throw error
 
-      // Log activity
+      // Log activity - FIXED: handle null values
       await logActivityClient({
-        userId: session?.user?.id,
-        userEmail: session?.user?.email,
-        userName: session?.user?.name,
+        userId: session?.user?.id ?? undefined,
+        userEmail: session?.user?.email ?? undefined,
+        userName: session?.user?.name ?? undefined,
         action: 'RETURN_LOAN',
         entityType: 'loan',
         entityId: loan.id,

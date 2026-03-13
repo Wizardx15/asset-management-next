@@ -36,11 +36,11 @@ export default function CreateAssetPage() {
         toast.error('Gagal menambah asset')
         console.error(error)
       } else {
-        // Log activity
+        // Log activity - FIXED: handle null values with ?? undefined
         await logActivityClient({
-          userId: session?.user?.id,
-          userEmail: session?.user?.email,
-          userName: session?.user?.name,
+          userId: session?.user?.id ?? undefined,
+          userEmail: session?.user?.email ?? undefined,
+          userName: session?.user?.name ?? undefined,
           action: 'CREATE_ASSET',
           entityType: 'asset',
           entityId: data?.[0]?.id,

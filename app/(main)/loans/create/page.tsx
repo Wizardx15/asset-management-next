@@ -117,11 +117,11 @@ export default function CreateLoanPage() {
         toast.error('Gagal mengajukan peminjaman')
         console.error(error)
       } else {
-        // Log activity
+        // Log activity - FIXED: handle null values with ?? undefined
         await logActivityClient({
-          userId: session?.user?.id,
-          userEmail: session?.user?.email,
-          userName: session?.user?.name,
+          userId: session?.user?.id ?? undefined,
+          userEmail: session?.user?.email ?? undefined,
+          userName: session?.user?.name ?? undefined,
           action: 'CREATE_LOAN',
           entityType: 'loan',
           entityId: data?.[0]?.id,
