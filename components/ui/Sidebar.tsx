@@ -13,7 +13,9 @@ import {
   Menu,
   X,
   ChevronDown,
-  UserCog
+  UserCog,
+  MessageSquare,      // Tambah icon Chat
+  HelpCircle          // Tambah icon Helpdesk
 } from 'lucide-react'
 
 interface SidebarProps {
@@ -39,6 +41,36 @@ export default function Sidebar({ userRole }: SidebarProps) {
     {
       title: 'Peminjaman',
       href: '/loans',
+      icon: ClipboardList
+    },
+    // ===== TAMBAHAN MENU CHAT & HELPDESK =====
+    {
+      title: 'Chat',
+      href: '/chat',
+      icon: MessageSquare
+    },
+    {
+      title: 'Helpdesk',
+      href: '/helpdesk',
+      icon: HelpCircle
+    }
+    // ========================================
+  ]
+
+  const adminMenuItems = [
+    {
+      title: 'Manajemen User',
+      href: '/admin/users',
+      icon: Users
+    },
+    {
+      title: 'Settings',
+      href: '/admin/settings',
+      icon: Settings
+    },
+    {
+      title: 'Activity Log',
+      href: '/admin/activity',
       icon: ClipboardList
     }
   ]
@@ -86,7 +118,7 @@ export default function Sidebar({ userRole }: SidebarProps) {
           {/* Navigation */}
           <nav className="flex-1 overflow-y-auto p-4">
             <ul className="space-y-2">
-              {/* Main Menu */}
+              {/* Main Menu (termasuk Chat & Helpdesk) */}
               {menuItems.map((item) => {
                 const Icon = item.icon
                 return (
@@ -159,6 +191,26 @@ export default function Sidebar({ userRole }: SidebarProps) {
                           >
                             <Settings className="w-5 h-5" />
                             <span>Settings</span>
+                          </Link>
+                        </li>
+                      )}
+
+                      {/* Activity Log - untuk SUPER_ADMIN */}
+                      {userRole === 'SUPER_ADMIN' && (
+                        <li>
+                          <Link
+                            href="/admin/activity"
+                            onClick={() => setIsOpen(false)}
+                            className={`
+                              flex items-center gap-3 px-4 py-2 rounded-lg transition-colors
+                              ${isActive('/admin/activity') 
+                                ? 'bg-blue-50 text-blue-600' 
+                                : 'text-gray-700 hover:bg-gray-100'
+                              }
+                            `}
+                          >
+                            <ClipboardList className="w-5 h-5" />
+                            <span>Activity Log</span>
                           </Link>
                         </li>
                       )}
