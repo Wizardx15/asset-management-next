@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "generate-icons": "node scripts/generate-icons.js"
+    "generate-icons": "node scripts/generate-icons.js",
+    "generate-splash": "node scripts/generate-splash.js",
+    "generate-all": "npm run generate-icons && npm run generate-splash"
   },
   "dependencies": {
     "@supabase/realtime-js": "^2.99.1",

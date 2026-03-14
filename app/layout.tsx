@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
 import { Toaster } from 'react-hot-toast'
+import ServiceWorkerRegister from '@/components/ServiceWorkerRegister'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -105,11 +106,6 @@ export const metadata: Metadata = {
     },
   },
 
-  // Verification for webmaster tools
-  verification: {
-    google: 'google-site-verification-code', // Ganti dengan code lo nanti
-  },
-
   // Category
   category: 'technology',
 }
@@ -129,7 +125,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="id">  {/* Ganti dari "en" jadi "id" */}
+    <html lang="id">
       <head>
         {/* Meta tag tambahan untuk PWA */}
         <meta name="application-name" content="Asset Management" />
@@ -147,6 +143,17 @@ export default function RootLayout({
         <link rel="icon" type="image/png" sizes="16x16" href="/icon-16x16.png" />
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#2563eb" />
         <link rel="shortcut icon" href="/favicon.ico" />
+
+        {/* Splash screens untuk iOS */}
+        <link rel="apple-touch-startup-image" href="/splash-640x1136.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" />
+        <link rel="apple-touch-startup-image" href="/splash-750x1334.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" />
+        <link rel="apple-touch-startup-image" href="/splash-828x1792.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" />
+        <link rel="apple-touch-startup-image" href="/splash-1125x2436.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" />
+        <link rel="apple-touch-startup-image" href="/splash-1242x2208.png" media="(device-width: 414px) and (device-height: 736px) and (-webkit-device-pixel-ratio: 3)" />
+        <link rel="apple-touch-startup-image" href="/splash-1242x2688.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" />
+        <link rel="apple-touch-startup-image" href="/splash-1536x2048.png" media="(min-device-width: 768px) and (max-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2)" />
+        <link rel="apple-touch-startup-image" href="/splash-1668x2224.png" media="(min-device-width: 834px) and (max-device-width: 1112px) and (-webkit-min-device-pixel-ratio: 2)" />
+        <link rel="apple-touch-startup-image" href="/splash-2048x2732.png" media="(min-device-width: 1024px) and (-webkit-min-device-pixel-ratio: 2)" />
       </head>
       <body className={inter.className}>
         <Providers>
@@ -176,6 +183,7 @@ export default function RootLayout({
             }}
           />
         </Providers>
+        <ServiceWorkerRegister />
       </body>
     </html>
   )
