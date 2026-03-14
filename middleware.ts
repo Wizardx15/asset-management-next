@@ -6,6 +6,11 @@ export default withAuth(
     const token = req.nextauth.token
     const path = req.nextUrl.pathname
 
+    // Set bahasa Indonesia di header
+    const response = NextResponse.next()
+    response.headers.set('Content-Language', 'id')
+    response.headers.set('Accept-Language', 'id, en;q=0.7')
+
     // Admin routes
     if (path.startsWith("/admin")) {
       if (token?.role !== "ADMIN" && token?.role !== "SUPER_ADMIN") {
@@ -20,23 +25,7 @@ export default withAuth(
       }
     }
 
-    // Assets routes - hanya admin yang bisa create/edit/delete
-    if (path.startsWith("/assets/create") || 
-        path.startsWith("/assets/edit") || 
-        path.startsWith("/assets/delete")) {
-      if (token?.role !== "ADMIN" && token?.role !== "SUPER_ADMIN") {
-        return NextResponse.redirect(new URL("/assets", req.url))
-      }
-    }
-
-    // Loans approve/reject - hanya admin
-    if (path.includes("/loans/") && (path.includes("approve") || path.includes("reject"))) {
-      if (token?.role !== "ADMIN" && token?.role !== "SUPER_ADMIN") {
-        return NextResponse.redirect(new URL("/loans", req.url))
-      }
-    }
-
-    return NextResponse.next()
+    return response
   },
   {
     callbacks: {
@@ -51,6 +40,8 @@ export const config = {
     "/assets/:path*", 
     "/loans/:path*", 
     "/admin/:path*",
-    "/super-admin/:path*"
+    "/super-admin/:path*",
+    "/chat/:path*",
+    "/helpdesk/:path*"
   ]
 }
